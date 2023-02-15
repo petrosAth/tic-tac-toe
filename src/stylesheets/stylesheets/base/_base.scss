@@ -1,0 +1,80 @@
+// -----------------------------------------------------------------------------
+// This file contains very basic styles.
+// -----------------------------------------------------------------------------
+
+/// Load custom modules
+@use '../abstracts' as a;
+
+/**
+ * Set up a decent box model on the root element
+ */
+html {
+  box-sizing: border-box;
+}
+
+/**
+ * Make the page content fill the whole browser window
+ */
+html,
+body {
+  height: 100vh;
+}
+
+/**
+ * Make all elements from the DOM inherit from the parent box-sizing
+ * Since `*` has a specificity of 0, it does not override the `html` value
+ * making all elements inheriting from the root box-sizing value
+ * See: https://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/
+ */
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/**
+ * Remove default margin
+ */
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+/**
+ * Basic styles for links
+ */
+a {
+  color: a.theme-color('primary');
+  text-decoration: none;
+
+  @include a.on-event {
+    text-decoration: underline;
+  }
+}
+
+/**
+ * Make images easier to work with
+ */
+img,
+picture,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+/**
+ * Basic styles for buttons
+ */
+button {
+  border: none;
+  background-color: unset;
+  display: inline-block;
+}
+
+/**
+ * Basic styles for inputs
+ */
+input {
+  display: block;
+}

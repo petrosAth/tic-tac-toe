@@ -1,0 +1,96 @@
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass variables.
+// -----------------------------------------------------------------------------
+
+/// Load Sass built-in modules
+@use 'sass:color';
+
+/// Regular font family
+/// @type List
+$font-stack-text: 'Roboto', 'Open Sans', 'Helvetica Neue Light', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif !default;
+
+/// Accent font family
+/// @type List
+$font-stack-accent: 'Roboto Condensed', 'Open Sans', 'Helvetica Neue Light', 'Helvetica Neue', 'Helvetica', 'Arial',
+  sans-serif !default;
+
+/// Code (monospace) font family
+/// @type List
+$font-stack-code: 'Courier New', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Monaco', monospace !default;
+
+// Text base font size
+$base-font-size: 1rem;
+
+// Text line height
+$base-line-height: 1.25 * $base-font-size;
+
+// Text font sizes
+$text-settings: (
+  900: (
+    font-size: 3rem,
+    line-height: 3,
+  ),
+  800: (
+    font-size: 2.5rem,
+    line-height: 2.5,
+  ),
+  700: (
+    font-size: 2rem,
+    line-height: 2,
+  ),
+  600: (
+    font-size: 1.5rem,
+    line-height: 1.5,
+  ),
+  500: (
+    font-size: 1.25rem,
+    line-height: 1.25,
+  ),
+  400: (
+    font-size: $base-font-size,
+    line-height: $base-line-height * 1,
+  ),
+  300: (
+    font-size: 0.875rem,
+    line-height: 0.875,
+  ),
+  200: (
+    font-size: 0.75rem,
+    line-height: 0.75,
+  ),
+  100: (
+    font-size: 0.625rem,
+    line-height: 0.625,
+  ),
+);
+
+// -----------------------------------------------------------------------------
+
+/// Border radius
+/// @type Length
+$border-radius: 1em;
+
+// -----------------------------------------------------------------------------
+
+/// Container's maximum width
+/// @type Length
+$max-width: 1180px !default;
+
+// -----------------------------------------------------------------------------
+
+/// Breakpoints map
+/// @prop {String} keys - Keys are identifiers mapped to a given length
+/// @prop {Map} values - Values are actual breakpoints expressed in pixels
+$breakpoints: (
+  'small': 320px,
+  'medium': 768px,
+  'large': 1024px,
+) !default;
+
+// -----------------------------------------------------------------------------
+
+/// Relative or absolute URL where all assets are served from
+/// @type String
+/// @example scss - When using a CDN
+///   $base-url: 'https://cdn.example.com/assets/';
+$base-url: '.' !default;
