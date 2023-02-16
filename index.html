@@ -8,27 +8,43 @@
     <title>Tic Tac Toe</title>
   </head>
   <body>
-    <header>
+    <header class="header">
       <div class="logo">
         <div class="logo__icon"></div>
         <div class="logo__text"><h1>Tic Tac Toe</h1></div>
       </div>
+      <button class="button button-reset" type="button">Reset</button>
     </header>
-    <main>
-      <div class="game">
-        <div class="game__score">
-          <h2>Score</h2>
-          <ul>
-            <li><span class="score__player1__name">Player 1</span>: <span class="score__player1__score">0</span></li>
-            <li><span class="score__player2__name">Player 2</span>: <span class="score__player2__score">0</span></li>
-          </ul>
+    <main class="main">
+      <section class="board">
+        <div class="board__column">
+          <button class="board__row" id="c1r1" type="button"></button>
+          <button class="board__row" id="c1r2" type="button"></button>
+          <button class="board__row" id="c1r3" type="button"></button>
         </div>
-        <div class="game__board">
-          <div class="game__board__line1">-|-|-</div>
-          <div class="game__board__line2">-|-|-</div>
-          <div class="game__board__line3">-|-|-</div>
+        <div class="board__column">
+          <button class="board__row" id="c2r1" type="button"></button>
+          <button class="board__row" id="c2r2" type="button"></button>
+          <button class="board__row" id="c2r3" type="button"></button>
         </div>
-      </div>
+        <div class="board__column">
+          <button class="board__row" id="c3r1" type="button"></button>
+          <button class="board__row" id="c3r2" type="button"></button>
+          <button class="board__row" id="c3r3" type="button"></button>
+        </div>
+      </section>
+      <div class="separator"></div>
+      <section class="score">
+        <h2 class="score__header">Score</h2>
+        <ul class="score__board">
+          <li class="score__board__player">
+            <span class="player__name">Player 1</span> <span class="player__score" id="scoreP1">0</span>
+          </li>
+          <li class="score__board__player">
+            <span class="player__name">Player 2</span> <span class="player__score" id="scoreP2">0</span>
+          </li>
+        </ul>
+      </section>
     </main>
   </body>
 </html>

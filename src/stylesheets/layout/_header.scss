@@ -1,3 +1,14 @@
 // -----------------------------------------------------------------------------
 // This file contains all styles related to the header of the site/application.
 // -----------------------------------------------------------------------------
+
+/// Load custom modules
+@use '../abstracts' as a;
+
+.header {
+  background-color: a.theme-color('background');
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-bottom: 0.375rem dashed a.theme-color('dark');
+}

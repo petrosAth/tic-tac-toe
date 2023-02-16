@@ -21,34 +21,31 @@ $font-stack-code: 'Courier New', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono',
 // Text base font size
 $base-font-size: 1rem;
 
-// Text line height
-$base-line-height: 1.25 * $base-font-size;
-
 // Text font sizes
 $text-settings: (
   900: (
     font-size: 3rem,
-    line-height: 3,
+    line-height: 1,
   ),
   800: (
     font-size: 2.5rem,
-    line-height: 2.5,
+    line-height: 1,
   ),
   700: (
     font-size: 2rem,
-    line-height: 2,
+    line-height: 1,
   ),
   600: (
     font-size: 1.5rem,
-    line-height: 1.5,
+    line-height: 1,
   ),
   500: (
     font-size: 1.25rem,
-    line-height: 1.25,
+    line-height: 1,
   ),
   400: (
-    font-size: $base-font-size,
-    line-height: $base-line-height * 1,
+    font-size: 1rem,
+    line-height: 1,
   ),
   300: (
     font-size: 0.875rem,

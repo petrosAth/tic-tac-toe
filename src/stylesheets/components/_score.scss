@@ -1,0 +1,44 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the score component.
+// -----------------------------------------------------------------------------
+
+/// Load custom modules
+@use '../abstracts' as a;
+
+.score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  &__header {
+    color: a.theme-color('accent1');
+    @include a.text-setting(800);
+  }
+
+  &__board {
+    list-style: none;
+    display: flex;
+    gap: 4rem;
+    @include a.text-setting(600);
+
+    &__player {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+
+      .player {
+        &__name {
+          color: a.theme-color('accent2');
+        }
+
+        &__score {
+          color: a.theme-color('light');
+          @include a.text-setting(900);
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}

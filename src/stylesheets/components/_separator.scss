@@ -1,0 +1,11 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the separator component.
+// -----------------------------------------------------------------------------
+
+/// Load custom modules
+@use '../abstracts' as a;
+
+.separator {
+  padding-block: 0.75rem;
+  border-top: 0.125rem dotted a.theme-color('dark');
+}

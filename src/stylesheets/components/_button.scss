@@ -1,3 +1,33 @@
 // -----------------------------------------------------------------------------
 // This file contains all styles related to the button component.
 // -----------------------------------------------------------------------------
+
+/// Load custom modules
+@use '../abstracts' as a;
+@use '../themes' as t;
+
+.button-reset {
+  color: a.theme-color('light');
+  display: flex;
+  align-items: center;
+  @include a.text-setting(700);
+  // border-radius: calc($book-info-radius * 0.75);
+  // width: calc($book-info-height * 0.75);
+  // height: calc($book-info-height * 0.75);
+
+  &:focus-visible {
+    // background-color: a.theme-color('foreground');
+    outline: 0.0675rem solid a.theme-color('accent1');
+  }
+  &:hover:not(:disabled) {
+    background-color: a.theme-color('primary');
+  }
+  &:focus {
+    background-color: a.theme-color('dark');
+    outline: 0.0675rem solid a.theme-color('accent1');
+  }
+  &:active:not(:disabled) {
+    background-color: a.theme-color('accent1');
+    outline: none;
+  }
+}
