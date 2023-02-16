@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
-  base: '/library/',
+  base: '/tic-tac-toe/',
   css: {
     devSourcemap: true,
   },
