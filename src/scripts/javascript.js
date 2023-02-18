@@ -24,10 +24,10 @@ const gameScore = (() => {
 
   function setScore(opt) {
     const opts = {
-      P1: [true, [1, 0]],
-      P2: [true, [0, 1]],
-      draw: [true, [1, 1]],
-      reset: [false],
+      1: [true, [1, 0]],
+      2: [true, [0, 1]],
+      d: [true, [1, 1]],
+      _: [false],
     };
 
     if (Object.keys(opts).includes(opt)) {
