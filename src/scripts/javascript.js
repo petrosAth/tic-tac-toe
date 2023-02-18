@@ -39,3 +39,45 @@ const gameScore = (() => {
 
   return setScore;
 })();
+
+const gameboard = (() => {
+  const board = [
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', ''],
+  ];
+
+  function resetBoard() {
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board[i].length; j++) {
+        board[i][j] = '';
+        modifyHTML([i, j]);
+      }
+    }
+  }
+
+  function modifyHTML(boardPos, opt) {
+    const signs = {
+      x: { name: 'cross', cssClass: 'sign--cross' },
+      o: { name: 'circle', cssClass: 'sign--circle' },
+    };
+    const signElement = document.querySelector(`#gb${boardPos[0]}${boardPos[1]}`);
+
+    if (opt === undefined) {
+      Object.keys(signs).forEach((sign) => {
+        signElement.classList.remove(signs[sign].cssClass);
+      });
+    } else {
+      signElement.classList.add(signs[opt].cssClass);
+    }
+  }
+
+  function setGameboard(boardPos, opt) {
+    if (boardPos === undefined) {
+      resetBoard();
+    } else if (['x', 'o'].includes(opt)) {
+      board[boardPos[0]][boardPos[1]] = opt;
+      modifyHTML(boardPos, opt);
+    }
+  return setGameboard;
+})();
