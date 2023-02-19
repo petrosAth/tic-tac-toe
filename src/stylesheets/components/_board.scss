@@ -19,6 +19,11 @@
     align-items: center;
     justify-items: center;
 
+    &__row {
+      width: 100%;
+      height: 100%;
+    }
+
     &:first-child {
       button {
         border-right: min(0.5vh, 0.5vw) solid a.theme-color('light', 'dark');
@@ -48,11 +53,6 @@
     button:nth-child(even) {
       border-block: min(0.5vh, 0.5vw) solid a.theme-color('light', 'dark');
     }
-  }
-
-  &__row {
-    width: 100%;
-    height: 100%;
   }
 
   .sign {

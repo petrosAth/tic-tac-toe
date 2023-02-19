@@ -11,8 +11,12 @@
   align-items: center;
   gap: 1rem;
 
+  &--hidden {
+    display: none;
+  }
+
   &__header {
-    color: a.theme-color('accent1');
+    color: a.theme-color('accent2');
     @include a.text-setting(800);
   }
 
@@ -30,7 +34,7 @@
 
       .player {
         &__name {
-          color: a.theme-color('accent2');
+          color: a.theme-color('accent1');
         }
 
         &__score {
