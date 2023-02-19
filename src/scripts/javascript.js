@@ -47,15 +47,6 @@ const gameboard = (() => {
     ['', '', ''],
   ];
 
-  function resetBoard() {
-    for (let i = 0; i < board.length; i++) {
-      for (let j = 0; j < board[i].length; j++) {
-        board[i][j] = '';
-        modifyHTML([i, j]);
-      }
-    }
-  }
-
   function modifyHTML(boardPos, opt) {
     const signs = {
       x: { name: 'cross', cssClass: 'sign--cross' },
@@ -72,6 +63,15 @@ const gameboard = (() => {
     }
   }
 
+  function resetBoard() {
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board[i].length; j++) {
+        board[i][j] = '';
+        modifyHTML([i, j]);
+      }
+    }
+  }
+
   function setGameboard(boardPos, opt) {
     if (boardPos === undefined) {
       resetBoard();
@@ -79,5 +79,18 @@ const gameboard = (() => {
       board[boardPos[0]][boardPos[1]] = opt;
       modifyHTML(boardPos, opt);
     }
-  return setGameboard;
+  }
+
+  (function watchBoard() {
+    const buttons = document.querySelectorAll(`[id^='gb']`);
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (board[btn.id[2]][btn.id[3]] === '') {
+          setGameboard([btn.id[2], btn.id[3]], 'x');
+        }
+      });
+    });
+  })();
+
+  return board;
 })();
