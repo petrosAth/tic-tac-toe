@@ -94,3 +94,56 @@ const gameboard = (() => {
 
   return board;
 })();
+const game = (() => {
+  function togglePanels(panels) {
+    panels.forEach((panel) => {
+      const togglePanel = document.querySelector(`.${panel}`);
+      togglePanel.classList.toggle(`${panel}--hidden`);
+    });
+  }
+
+  function setMode(mode) {
+    if (!['opponent', 'name', 'score'].includes(mode)) {
+      return;
+    }
+
+    const modes = {
+      opponent: {},
+      name: {
+        computer: ['opponent', 'name', 'input__P1'],
+        human: ['opponent', 'name', 'input__P1', 'input__P2'],
+      },
+      score: {},
+    };
+
+    togglePanels(modes[mode][getOpponent()]);
+
+    return mode;
+  }
+
+  const getOpponent = (() => {
+    let opponent;
+
+    function setOpponent(opt) {
+      opponent = opt;
+      setMode('name');
+    }
+
+    const btnComputer = document.querySelector('.option__single');
+    const btnHuman = document.querySelector('.option__multi');
+
+    btnComputer.addEventListener('click', () => {
+      setOpponent('computer');
+    });
+
+    btnHuman.addEventListener('click', () => {
+      setOpponent('human');
+    });
+
+    function returnOpponent() {
+      return opponent;
+    }
+
+    return returnOpponent;
+  })();
+})();

@@ -35,38 +35,28 @@
       </section>
       <div class="separator"></div>
       <section class="panel">
-        <div class="mode">
-          <ul class="mode__picker">
-            <li class="mode__picker__option">
-              <button class="button button__option option__single" type="button" autofocus>Play against A.I.!</button>
+        <div class="opponent">
+          <ul class="opponent__picker">
+            <li class="opponent__picker__option">
+              <button class="button button__option option__single" type="button" autofocus>
+                Play against the computer!
+              </button>
             </li>
-            <li class="mode__picker__option">
+            <li class="opponent__picker__option">
               <button class="button button__option option__multi" type="button">Play against a friend!</button>
             </li>
           </ul>
         </div>
         <div class="name name--hidden">
           <form class="name__form">
-            <div class="name__form__data">
-              <div class="name__form__data__insert insert--hidden">
-                <label for="name__form__data__insert-player1">Insert name</label>
-                <input
-                  type="text"
-                  id="name__form__data__insert-player1"
-                  name="name"
-                  required="required"
-                  placeholder="Player 1"
-                />
+            <div class="name__form__input input">
+              <div class="input__P1 input__P1--hidden">
+                <label for="input__P1__data">Insert name</label>
+                <input type="text" id="input__P1__data" name="name" required="required" placeholder="Player 1" />
               </div>
-              <div class="name__form__data__insert insert--hidden">
-                <label for="name__form__data__insert-player2">Insert name</label>
-                <input
-                  type="text"
-                  id="name__form__data__insert-player2"
-                  name="name"
-                  required="required"
-                  placeholder="Player 2"
-                />
+              <div class="input__P2 input__P2--hidden">
+                <label for="input__P2__data">Insert name</label>
+                <input type="text" id="input__P2__data" name="name" required="required" placeholder="Player 2" />
               </div>
             </div>
             <button class="button button__name__form">Start!</button>
