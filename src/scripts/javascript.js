@@ -101,11 +101,18 @@ const game = (() => {
       togglePanel.classList.toggle(`${panel}--hidden`);
     });
   }
+const CreatePlayer = (id, species, name, score, sign) => {
+  (function modifyHTML() {
+    const player = document.querySelector(`#name${id}`);
+    player.textContent = `${name} ${sign}`;
+  })();
 
   function setMode(mode) {
     if (!['opponent', 'name', 'score'].includes(mode)) {
       return;
     }
+  return { id, species, name, score, sign };
+};
 
     const modes = {
       opponent: {},
