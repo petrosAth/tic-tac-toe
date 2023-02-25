@@ -94,63 +94,79 @@ const gameboard = (() => {
 
   return board;
 })();
-const game = (() => {
-  function togglePanels(panels) {
-    panels.forEach((panel) => {
-      const togglePanel = document.querySelector(`.${panel}`);
-      togglePanel.classList.toggle(`${panel}--hidden`);
-    });
-  }
 const CreatePlayer = (id, species, name, score, sign) => {
   (function modifyHTML() {
     const player = document.querySelector(`#name${id}`);
     player.textContent = `${name} ${sign}`;
   })();
 
-  function setMode(mode) {
-    if (!['opponent', 'name', 'score'].includes(mode)) {
-      return;
-    }
   return { id, species, name, score, sign };
 };
 
-    const modes = {
-      opponent: {},
-      name: {
-        computer: ['opponent', 'name', 'input__P1'],
-        human: ['opponent', 'name', 'input__P1', 'input__P2'],
-      },
-      score: {},
+const game = (() => {
+  const events = (() => {
+    const events = {};
+    const subscribe = (eventName, fn) => {
+      events[eventName] = events[eventName] || [];
+      events[eventName].push(fn);
+    };
+    const unsubscribe = (eventName, fn) => {
+      if (events[eventName]) {
+        for (var i = 0; i < events[eventName].length; i++) {
+          if (events[eventName][i] === fn) {
+            events[eventName].splice(i, 1);
+            break;
+          }
+        }
+      }
+    };
+    const publish = (eventName, data) => {
+      if (events[eventName]) {
+        events[eventName].forEach(function (fn) {
+          fn(data);
+        });
+      }
     };
 
-    togglePanels(modes[mode][getOpponent()]);
+    return {
+      subscribe: subscribe,
+      unsubscribe: unsubscribe,
+      publish: publish,
+    };
+  })();
 
-    return mode;
-  }
+  const getPlayers = (() => {
+    let players = {};
 
-  const getOpponent = (() => {
-    let opponent;
+    const _destroy = () => (players = {});
 
-    function setOpponent(opt) {
-      opponent = opt;
-      setMode('name');
-    }
+    const _getOpponent = () => {
+      const btnComputer = document.querySelector('.option__single');
+      const btnHuman = document.querySelector('.option__multi');
+      const _buttonEvent = (species) => {
+        players[1].species = species;
+        events.publish('fill');
+      };
 
-    const btnComputer = document.querySelector('.option__single');
-    const btnHuman = document.querySelector('.option__multi');
+      btnComputer.addEventListener('click', () => {
+        _buttonEvent('computer');
+      });
 
-    btnComputer.addEventListener('click', () => {
-      setOpponent('computer');
-    });
+      btnHuman.addEventListener('click', () => {
+        _buttonEvent('human');
+      });
+    };
 
-    btnHuman.addEventListener('click', () => {
-      setOpponent('human');
-    });
+    const _init = () => {
+      _destroy();
+      players = {
+        0: CreatePlayer('P1', 'human', '', 0, 'x'),
+        1: CreatePlayer('P2', '', '', 0, 'o'),
+      };
+      _getOpponent();
+    };
+    events.subscribe('pick', _init);
 
-    function returnOpponent() {
-      return opponent;
-    }
-
-    return returnOpponent;
+    return players;
   })();
 })();
