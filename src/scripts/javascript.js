@@ -138,31 +138,37 @@ const game = (() => {
   const getPlayers = (() => {
     let players = {};
 
-    const _destroy = () => (players = {});
+    const _render = () => {
+      const panel = document.querySelector('.panel');
+      const template = document.querySelector('#template');
+      const clone = template.content.cloneNode(true);
+
+      panel.appendChild(clone);
+    };
 
     const _getOpponent = () => {
-      const btnComputer = document.querySelector('.option__single');
-      const btnHuman = document.querySelector('.option__multi');
-      const _buttonEvent = (species) => {
-        players[1].species = species;
-        events.publish('fill');
+      const buttonComputer = document.querySelector('.option__single');
+      const buttonHuman = document.querySelector('.option__multi');
+
+      const _buttonEvent = (button, species) => {
+        button.addEventListener('click', () => {
+          players[1].species = species;
+          events.publish('fill');
+          console.log(players[0]);
+          console.log(players[1]);
+        });
       };
 
-      btnComputer.addEventListener('click', () => {
-        _buttonEvent('computer');
-      });
-
-      btnHuman.addEventListener('click', () => {
-        _buttonEvent('human');
-      });
+      _buttonEvent(buttonComputer, 'computer');
+      _buttonEvent(buttonHuman, 'human');
     };
 
     const _init = () => {
-      _destroy();
       players = {
         0: CreatePlayer('P1', 'human', '', 0, 'x'),
         1: CreatePlayer('P2', '', '', 0, 'o'),
       };
+      _render();
       _getOpponent();
     };
     events.subscribe('pick', _init);
