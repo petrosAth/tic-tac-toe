@@ -35,19 +35,22 @@
       </section>
       <div class="separator"></div>
       <section class="panel">
-        <div class="opponent">
-          <ul class="opponent__picker">
-            <li class="opponent__picker__option">
-              <button class="button button__option option__single" type="button" autofocus>
-                Play against the computer!
-              </button>
-            </li>
-            <li class="opponent__picker__option">
-              <button class="button button__option option__multi" type="button">Play against a friend!</button>
-            </li>
-          </ul>
-        </div>
         <div class="name name--hidden">
+        <template id="template">
+          <div class="pick">
+            <!-- <ul class="opponent"> -->
+            <ul class="opponent--hidden">
+              <li class="opponent__option">
+                <button class="button button__option option__single" type="button" autofocus>
+                  Play against the computer!
+                </button>
+              </li>
+              <li class="opponent__option">
+                <button class="button button__option option__multi" type="button">Play against a friend!</button>
+              </li>
+            </ul>
+          </div>
+        </template>
           <form class="name__form">
             <div class="name__form__input input">
               <div class="input__P1 input__P1--hidden">

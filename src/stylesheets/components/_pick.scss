@@ -5,17 +5,17 @@
 /// Load custom modules
 @use '../abstracts' as a;
 
-.opponent {
+.pick {
   padding-top: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 
-  &.opponent--hidden {
+  .opponent--hidden {
     display: none;
   }
 
-  &__picker {
+  .opponent {
     list-style: none;
     display: flex;
     justify-content: space-around;
