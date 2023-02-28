@@ -135,16 +135,40 @@ const game = (() => {
     };
   })();
 
+  const render = (() => {
+    const panel = document.querySelector('.panel');
+    const template = document.querySelector('#template').content;
+
+    const _pickPanel = () => {
+      const pick = template.querySelector('.pick');
+      return pick;
+    };
+
+    const _fillPanel = (opponent) => {
+      const fill = template.querySelector('.fill');
+
+
+      if (opponent === 'computer') {
+        const inputP2 = fill.querySelector('.input:has([for="input__P2"])');
+        inputP2.remove();
+      }
+
+      return fill;
+    };
+
+    const renderPanel = (eventPanel, opt = undefined) => {
+      const panels = {
+        pick: _pickPanel,
+        fill: _fillPanel,
+      };
+      panel.replaceChildren(panels[eventPanel](opt));
+    };
+
+    return renderPanel;
+  })();
+
   const getPlayers = (() => {
     let players = {};
-
-    const _render = () => {
-      const panel = document.querySelector('.panel');
-      const template = document.querySelector('#template');
-      const clone = template.content.cloneNode(true);
-
-      panel.appendChild(clone);
-    };
 
     const _getOpponent = () => {
       const buttonComputer = document.querySelector('.option__single');
@@ -168,7 +192,7 @@ const game = (() => {
         0: CreatePlayer('P1', 'human', '', 0, 'x'),
         1: CreatePlayer('P2', '', '', 0, 'o'),
       };
-      _render();
+      render('pick');
       _getOpponent();
     };
     events.subscribe('pick', _init);
