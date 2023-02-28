@@ -193,6 +193,22 @@ const game = (() => {
     };
     events.subscribe('pick', _getOpponent);
 
+    const _getName = () => {
+      render('fill', players[1].species);
+      const form = document.querySelector('.fill__name-form');
+      const button = document.querySelector('.button__name-form');
 
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        if (form.checkValidity()) {
+          players[0].name = document.querySelector('#input__P1').value;
+          players[1].name = players[1].species === 'human' ? document.querySelector('#input__P2').value : 'computer';
+        } else {
+          form.reportValidity();
+        }
+      });
+    };
+    events.subscribe('fill', _getName);
   })();
 })();
