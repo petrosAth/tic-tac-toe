@@ -152,8 +152,9 @@ const game = (() => {
     const _fillPanel = (opponent) => {
       const fill = template.querySelector('.fill');
 
-
       if (opponent === 'computer') {
+        console.log(opponent); // WARN: Delete before deployment
+
         const inputP2 = fill.querySelector('.input:has([for="input__P2"])');
         inputP2.remove();
       }
@@ -183,8 +184,9 @@ const game = (() => {
         button.addEventListener('click', () => {
           players[1].species = species;
           events.publish('fill');
-          console.log(players[0]);
-          console.log(players[1]);
+
+          console.log(players[0]); // WARN: Delete before deployment
+          console.log(players[1]); // WARN: Delete before deployment
         });
       };
 
@@ -204,6 +206,9 @@ const game = (() => {
         if (form.checkValidity()) {
           players[0].name = document.querySelector('#input__P1').value;
           players[1].name = players[1].species === 'human' ? document.querySelector('#input__P2').value : 'computer';
+
+          console.log(players[0]); // WARN: Delete before deployment
+          console.log(players[1]); // WARN: Delete before deployment
         } else {
           form.reportValidity();
         }
