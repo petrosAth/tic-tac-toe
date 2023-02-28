@@ -104,6 +104,11 @@ const CreatePlayer = (id, species, name, score, sign) => {
 };
 
 const game = (() => {
+  const players = {
+    0: CreatePlayer('P1', 'human', '', 0, 'x'),
+    1: CreatePlayer('P2', '', '', 0, 'o'),
+  };
+
   const events = (() => {
     const events = {};
     const subscribe = (eventName, fn) => {
@@ -168,9 +173,9 @@ const game = (() => {
   })();
 
   const getPlayers = (() => {
-    let players = {};
-
     const _getOpponent = () => {
+      render('pick');
+
       const buttonComputer = document.querySelector('.option__single');
       const buttonHuman = document.querySelector('.option__multi');
 
@@ -186,17 +191,8 @@ const game = (() => {
       _buttonEvent(buttonComputer, 'computer');
       _buttonEvent(buttonHuman, 'human');
     };
+    events.subscribe('pick', _getOpponent);
 
-    const _init = () => {
-      players = {
-        0: CreatePlayer('P1', 'human', '', 0, 'x'),
-        1: CreatePlayer('P2', '', '', 0, 'o'),
-      };
-      render('pick');
-      _getOpponent();
-    };
-    events.subscribe('pick', _init);
 
-    return players;
   })();
 })();
