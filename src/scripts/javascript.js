@@ -14,15 +14,11 @@ const gameScore = (() => {
     });
   }
 
-  function modifyHTML() {
-    const scoreP1element = document.querySelector('#scoreP1');
-    const scoreP2element = document.querySelector('#scoreP2');
-
-    scoreP1element.textContent = score.P1;
-    scoreP2element.textContent = score.P2;
-  }
-
   function setScore(opt) {
+    if (opt === undefined) {
+      return score;
+    }
+
     const opts = {
       1: [true, [1, 0]],
       2: [true, [0, 1]],
@@ -33,8 +29,6 @@ const gameScore = (() => {
     if (Object.keys(opts).includes(opt)) {
       modifyScore(...opts[opt]);
     }
-
-    modifyHTML();
   }
 
   return setScore;
@@ -94,12 +88,8 @@ const gameboard = (() => {
 
   return board;
 })();
-const CreatePlayer = (id, species, name, score, sign) => {
-  (function modifyHTML() {
-    const player = document.querySelector(`#name${id}`);
-    player.textContent = `${name} ${sign}`;
-  })();
 
+const CreatePlayer = (id, species, name, score, sign) => {
   return { id, species, name, score, sign };
 };
 
@@ -108,6 +98,7 @@ const game = (() => {
     0: CreatePlayer('P1', 'human', '', 0, 'x'),
     1: CreatePlayer('P2', '', '', 0, 'o'),
   };
+  let round = 0;
 
   const events = (() => {
     const events = {};
@@ -143,15 +134,15 @@ const game = (() => {
   const render = (() => {
     const panel = document.querySelector('.panel');
     const template = document.querySelector('#template').content;
+    const pick = template.querySelector('.pick');
+    const fill = template.querySelector('.fill');
+    const score = template.querySelector('.score');
 
     const _pickPanel = () => {
-      const pick = template.querySelector('.pick');
       return pick;
     };
 
     const _fillPanel = (opponent) => {
-      const fill = template.querySelector('.fill');
-
       if (opponent === 'computer') {
         console.log(opponent); // WARN: Delete before deployment
 
@@ -162,10 +153,20 @@ const game = (() => {
       return fill;
     };
 
+    const _scorePanel = () => {
+      score.querySelector('#nameP1').textContent = players[0].name;
+      score.querySelector('#nameP2').textContent = players[1].name;
+      score.querySelector('#scoreP1').textContent = players[0].score;
+      score.querySelector('#scoreP2').textContent = players[1].score;
+
+      return score;
+    };
+
     const renderPanel = (eventPanel, opt = undefined) => {
       const panels = {
         pick: _pickPanel,
         fill: _fillPanel,
+        score: _scorePanel,
       };
       panel.replaceChildren(panels[eventPanel](opt));
     };
@@ -205,10 +206,12 @@ const game = (() => {
 
         if (form.checkValidity()) {
           players[0].name = document.querySelector('#input__P1').value;
-          players[1].name = players[1].species === 'human' ? document.querySelector('#input__P2').value : 'computer';
+          players[1].name = players[1].species === 'human' ? document.querySelector('#input__P2').value : 'A.I.';
 
           console.log(players[0]); // WARN: Delete before deployment
           console.log(players[1]); // WARN: Delete before deployment
+
+          events.publish('score');
         } else {
           form.reportValidity();
         }
@@ -216,4 +219,10 @@ const game = (() => {
     };
     events.subscribe('fill', _getName);
   })();
+
+  const play = () => {
+    render('score');
+    const setScore = gameScore;
+  };
+  events.subscribe('score', play);
 })();
