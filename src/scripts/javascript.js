@@ -14,11 +14,7 @@ const gameScore = (() => {
     });
   }
 
-  function setScore(opt) {
-    if (opt === undefined) {
-      return score;
-    }
-
+  const setScore = (opt) => {
     const opts = {
       1: [true, [1, 0]],
       2: [true, [0, 1]],
@@ -29,9 +25,13 @@ const gameScore = (() => {
     if (Object.keys(opts).includes(opt)) {
       modifyScore(...opts[opt]);
     }
-  }
+  };
 
-  return setScore;
+  // return setScore;
+  return {
+    set: setScore,
+    get: score,
+  };
 })();
 
 const gameboard = (() => {
