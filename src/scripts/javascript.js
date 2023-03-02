@@ -1,12 +1,12 @@
 const gameScore = (() => {
   const score = {
+    P0: 0,
     P1: 0,
-    P2: 0,
   };
 
-  function modifyScore(notReset, newScore) {
+  function _modifyScore(reset, newScore) {
     Object.keys(score).forEach((player, index) => {
-      if (notReset) {
+      if (!reset) {
         score[player] += newScore[index];
       } else {
         score[player] = 0;
@@ -14,16 +14,23 @@ const gameScore = (() => {
     });
   }
 
+  function _render() {
+    for (let i = 0; i < Object.keys(score).length; i++) {
+      document.querySelector(`#scoreP${i}`).textContent = score[`P${i}`];
+    }
+  }
+
   const setScore = (opt) => {
     const opts = {
-      1: [true, [1, 0]],
-      2: [true, [0, 1]],
-      d: [true, [1, 1]],
-      _: [false],
+      ['x']: [false, [1, 0]],
+      ['o']: [false, [0, 1]],
+      ['d']: [false, [1, 1]],
+      ['_']: [true],
     };
 
     if (Object.keys(opts).includes(opt)) {
-      modifyScore(...opts[opt]);
+      _modifyScore(...opts[opt]);
+      _render();
     }
   };
 
@@ -41,7 +48,7 @@ const gameboard = (() => {
     ['', '', ''],
   ];
 
-  function modifyHTML(boardPos, opt) {
+  function _render(boardPos, opt) {
     const signs = {
       x: { name: 'cross', cssClass: 'sign--cross' },
       o: { name: 'circle', cssClass: 'sign--circle' },
@@ -61,7 +68,7 @@ const gameboard = (() => {
     for (let i = 0; i < board.length; i++) {
       for (let j = 0; j < board[i].length; j++) {
         board[i][j] = '';
-        modifyHTML([i, j]);
+        _render([i, j]);
       }
     }
   }
@@ -71,16 +78,16 @@ const gameboard = (() => {
       _resetBoard();
     } else if (['x', 'o'].includes(opt)) {
       board[boardPos[0]][boardPos[1]] = opt;
-      modifyHTML(boardPos, opt);
+      _render(boardPos, opt);
     }
   }
 
-  function hasWinner(round, sign) {
+  function getWinner(round, sign) {
     if (round < 4) {
       return;
     }
 
-    let winner = 'none';
+    let winner = 'n';
     const combinations = [
       [board[0][0], board[0][1], board[0][2]],
       [board[1][0], board[1][1], board[1][2]],
@@ -101,8 +108,8 @@ const gameboard = (() => {
       }
     });
 
-    if (round > 8 && winner === 'none') {
-      return 'draw';
+    if (round > 8 && winner === 'n') {
+      return 'd';
     }
 
     return winner;
@@ -111,7 +118,7 @@ const gameboard = (() => {
   return {
     get: board,
     set: setGameboard,
-    hasWinner: hasWinner,
+    getWinner: getWinner,
   };
 })();
 
@@ -121,10 +128,9 @@ const CreatePlayer = (id, species, name, score, sign) => {
 
 const game = (() => {
   const players = {
-    0: CreatePlayer('P1', 'human', '', 0, 'x'),
-    1: CreatePlayer('P2', '', '', 0, 'o'),
+    0: CreatePlayer('P0', 'human', '', 0, 'x'),
+    1: CreatePlayer('P1', '', '', 0, 'o'),
   };
-  let round = 0;
 
   const events = (() => {
     const events = {};
@@ -172,19 +178,17 @@ const game = (() => {
       if (opponent === 'computer') {
         console.log(opponent); // WARN: Delete before deployment
 
-        const inputP2 = fill.querySelector('.input:has([for="input__P2"])');
-        inputP2.remove();
+        const inputP1 = fill.querySelector('.input:has([for="input__P1"])');
+        inputP1.remove();
       }
 
       return fill;
     };
 
-    // NOTE: move score render back to score
     const _scorePanel = () => {
-      score.querySelector('#nameP1').textContent = players[0].name;
-      score.querySelector('#nameP2').textContent = players[1].name;
-      score.querySelector('#scoreP1').textContent = players[0].score;
-      score.querySelector('#scoreP2').textContent = players[1].score;
+      for (let i = 0; i < Object.keys(players).length; i++) {
+        score.querySelector(`#nameP${i}`).textContent = players[i].name;
+      }
 
       return score;
     };
@@ -232,8 +236,8 @@ const game = (() => {
         event.preventDefault();
 
         if (form.checkValidity()) {
-          players[0].name = document.querySelector('#input__P1').value;
-          players[1].name = players[1].species === 'human' ? document.querySelector('#input__P2').value : 'A.I.';
+          players[0].name = document.querySelector('#input__P0').value;
+          players[1].name = players[1].species === 'human' ? document.querySelector('#input__P1').value : 'A.I.';
 
           console.log(players[0]); // WARN: Delete before deployment
           console.log(players[1]); // WARN: Delete before deployment
@@ -248,18 +252,32 @@ const game = (() => {
   })();
 
   const play = () => {
+    let round = 0;
     render('score');
-    const setScore = gameScore;
+    gameScore.set('_');
+
+    const _resetMatch = () => {
+      gameboard.set();
+      round = 0;
+    };
+
     const _startMatch = (() => {
       const buttons = document.querySelectorAll(`[id^='gb']`);
       buttons.forEach((cell) => {
         cell.addEventListener('click', () => {
           if (gameboard.get[cell.id[2]][cell.id[3]] === '') {
             let sign = players[round % 2].sign;
+
             gameboard.set([cell.id[2], cell.id[3]], sign);
             round++;
 
-            console.log('has winner' + gameboard.hasWinner(round, sign)); // WARN: Delete before deployment
+            if (['x', 'o', 'd'].includes(gameboard.getWinner(round, sign))) {
+              console.log('has winner: ' + gameboard.getWinner(round, sign)); // WARN: Delete before deployment
+              gameScore.set(gameboard.getWinner(round, sign));
+              players[0].score = gameScore.get.P0;
+              players[1].score = gameScore.get.P1;
+              _resetMatch();
+            }
           }
         });
       });
