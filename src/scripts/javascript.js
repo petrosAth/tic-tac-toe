@@ -29,8 +29,8 @@ const gameScore = (() => {
 
   // return setScore;
   return {
-    set: setScore,
     get: score,
+    set: setScore,
   };
 })();
 
@@ -57,7 +57,7 @@ const gameboard = (() => {
     }
   }
 
-  function resetBoard() {
+  function _resetBoard() {
     for (let i = 0; i < board.length; i++) {
       for (let j = 0; j < board[i].length; j++) {
         board[i][j] = '';
@@ -68,25 +68,51 @@ const gameboard = (() => {
 
   function setGameboard(boardPos, opt) {
     if (boardPos === undefined) {
-      resetBoard();
+      _resetBoard();
     } else if (['x', 'o'].includes(opt)) {
       board[boardPos[0]][boardPos[1]] = opt;
       modifyHTML(boardPos, opt);
     }
   }
 
-  (function watchBoard() {
-    const buttons = document.querySelectorAll(`[id^='gb']`);
-    buttons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        if (board[btn.id[2]][btn.id[3]] === '') {
-          setGameboard([btn.id[2], btn.id[3]], 'x');
-        }
-      });
-    });
-  })();
+  function hasWinner(round, sign) {
+    if (round < 4) {
+      return;
+    }
 
-  return board;
+    let winner = 'none';
+    const combinations = [
+      [board[0][0], board[0][1], board[0][2]],
+      [board[1][0], board[1][1], board[1][2]],
+      [board[2][0], board[2][1], board[2][2]],
+
+      [board[0][0], board[1][0], board[2][0]],
+      [board[0][1], board[1][1], board[2][1]],
+      [board[0][2], board[1][2], board[2][2]],
+
+      [board[0][0], board[1][1], board[2][2]],
+      [board[0][2], board[1][1], board[2][0]],
+    ];
+
+    combinations.forEach((combination) => {
+      console.log(combination.join('') === sign.repeat(3));
+      if (combination.join('') === sign.repeat(3)) {
+        winner = sign;
+      }
+    });
+
+    if (round > 8 && winner === 'none') {
+      return 'draw';
+    }
+
+    return winner;
+  }
+
+  return {
+    get: board,
+    set: setGameboard,
+    hasWinner: hasWinner,
+  };
 })();
 
 const CreatePlayer = (id, species, name, score, sign) => {
@@ -153,6 +179,7 @@ const game = (() => {
       return fill;
     };
 
+    // NOTE: move score render back to score
     const _scorePanel = () => {
       score.querySelector('#nameP1').textContent = players[0].name;
       score.querySelector('#nameP2').textContent = players[1].name;
@@ -223,6 +250,22 @@ const game = (() => {
   const play = () => {
     render('score');
     const setScore = gameScore;
+    const _startMatch = (() => {
+      const buttons = document.querySelectorAll(`[id^='gb']`);
+      buttons.forEach((cell) => {
+        cell.addEventListener('click', () => {
+          if (gameboard.get[cell.id[2]][cell.id[3]] === '') {
+            let sign = players[round % 2].sign;
+            gameboard.set([cell.id[2], cell.id[3]], sign);
+            round++;
+
+            console.log('has winner' + gameboard.hasWinner(round, sign)); // WARN: Delete before deployment
+          }
+        });
+      });
+    })();
   };
   events.subscribe('score', play);
+
+  events.publish('pick');
 })();
