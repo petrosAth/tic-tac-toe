@@ -152,25 +152,25 @@ const game = (() => {
     1: CreatePlayer('P1', '', '', 0, 'o'),
   };
 
-  const events = (() => {
-    const events = {};
+  const state = (() => {
+    const states = {};
     const subscribe = (eventName, fn) => {
-      events[eventName] = events[eventName] || [];
-      events[eventName].push(fn);
+      states[eventName] = states[eventName] || [];
+      states[eventName].push(fn);
     };
     const unsubscribe = (eventName, fn) => {
-      if (events[eventName]) {
-        for (var i = 0; i < events[eventName].length; i++) {
-          if (events[eventName][i] === fn) {
-            events[eventName].splice(i, 1);
+      if (states[eventName]) {
+        for (var i = 0; i < states[eventName].length; i++) {
+          if (states[eventName][i] === fn) {
+            states[eventName].splice(i, 1);
             break;
           }
         }
       }
     };
     const publish = (eventName, data) => {
-      if (events[eventName]) {
-        events[eventName].forEach(function (fn) {
+      if (states[eventName]) {
+        states[eventName].forEach(function (fn) {
           fn(data);
         });
       }
@@ -233,7 +233,7 @@ const game = (() => {
       const _buttonEvent = (button, species) => {
         button.addEventListener('click', () => {
           players[1].species = species;
-          events.publish('fill');
+          state.publish('fill');
         });
       };
 
@@ -254,13 +254,13 @@ const game = (() => {
           players[0].name = document.querySelector('#input__P0').value;
           players[1].name = players[1].species === 'human' ? document.querySelector('#input__P1').value : 'A.I.';
 
-          events.publish('score');
+          state.publish('score');
         } else {
           form.reportValidity();
         }
       });
     };
-    events.subscribe('fill', _getName);
+    state.subscribe('fill', _getName);
   })();
 
   const play = () => {
@@ -311,7 +311,5 @@ const game = (() => {
       });
     })();
   };
-  events.subscribe('score', play);
-
-  events.publish('pick');
+  state.subscribe('score', play);
 })();
