@@ -20,7 +20,7 @@ const gameScore = (() => {
     }
   }
 
-  const setScore = (opt) => {
+  const setScore = (sign) => {
     const opts = {
       ['x']: [false, [1, 0]],
       ['o']: [false, [0, 1]],
@@ -28,8 +28,8 @@ const gameScore = (() => {
       ['_']: [true],
     };
 
-    if (Object.keys(opts).includes(opt)) {
-      _modifyScore(...opts[opt]);
+    if (Object.keys(opts).includes(sign)) {
+      _modifyScore(...opts[sign]);
       _render();
     }
   };
@@ -62,7 +62,6 @@ const gameboard = (() => {
         signElement.classList.remove(signs[sign]);
       });
     } else {
-      // console.log(signs[opt]); // WARN: delete before deployment
       signElement.classList.add(signs[opt]);
     }
   }
@@ -76,12 +75,19 @@ const gameboard = (() => {
     }
   }
 
-  function setGameboard(boardPos, opt) {
-    if (boardPos === undefined) {
+  function setGameboard(ai, sign, boardPos) {
+    if (arguments.length === 0) {
       _resetBoard();
-    } else if (['x', 'o', 'X', 'O'].includes(opt)) {
-      board[boardPos[0]][boardPos[1]] = opt;
-      _render(boardPos, opt);
+    } else if (ai) {
+      let rng = [Math.floor(Math.random() * 3).toString(), Math.floor(Math.random() * 3).toString()];
+      while (board[rng[0]][rng[1]] !== '') {
+        rng = [Math.floor(Math.random() * 3).toString(), Math.floor(Math.random() * 3).toString()];
+      }
+      board[rng[0]][rng[1]] = sign;
+      _render([[rng[0]], [rng[1]]], sign);
+    } else if (['x', 'o', 'X', 'O'].includes(sign)) {
+      board[boardPos[0]][boardPos[1]] = sign;
+      _render(boardPos, sign);
     }
   }
 
@@ -94,16 +100,16 @@ const gameboard = (() => {
 
     // prettier-ignore
     const coordinates = [
-      [ [0, 0], [0, 1], [0, 2], ],
-      [ [1, 0], [1, 1], [1, 2], ],
-      [ [2, 0], [2, 1], [2, 2], ],
+      [[0, 0], [0, 1], [0, 2],],
+      [[1, 0], [1, 1], [1, 2],],
+      [[2, 0], [2, 1], [2, 2],],
 
-      [ [0, 0], [1, 0], [2, 0], ],
-      [ [0, 1], [1, 1], [2, 1], ],
-      [ [0, 2], [1, 2], [2, 2], ],
+      [[0, 0], [1, 0], [2, 0],],
+      [[0, 1], [1, 1], [2, 1],],
+      [[0, 2], [1, 2], [2, 2],],
 
-      [ [0, 0], [1, 1], [2, 2], ],
-      [ [0, 2], [1, 1], [2, 0], ],
+      [[0, 0], [1, 1], [2, 2],],
+      [[0, 2], [1, 1], [2, 0],],
     ];
 
     coordinates.forEach((c) => {
@@ -117,7 +123,7 @@ const gameboard = (() => {
         winner = sign;
 
         for (let i = 0; i < 3; i++) {
-          setGameboard([c[i][0], c[i][1]], sign.toUpperCase());
+          setGameboard(false, sign.toUpperCase(), [c[i][0], c[i][1]]);
         }
       }
     });
@@ -190,8 +196,6 @@ const game = (() => {
 
     const _fillPanel = (opponent) => {
       if (opponent === 'computer') {
-        console.log(opponent); // WARN: Delete before deployment
-
         const inputP1 = fill.querySelector('.input:has([for="input__P1"])');
         inputP1.remove();
       }
@@ -230,9 +234,6 @@ const game = (() => {
         button.addEventListener('click', () => {
           players[1].species = species;
           events.publish('fill');
-
-          console.log(players[0]); // WARN: Delete before deployment
-          console.log(players[1]); // WARN: Delete before deployment
         });
       };
 
@@ -252,9 +253,6 @@ const game = (() => {
         if (form.checkValidity()) {
           players[0].name = document.querySelector('#input__P0').value;
           players[1].name = players[1].species === 'human' ? document.querySelector('#input__P1').value : 'A.I.';
-
-          console.log(players[0]); // WARN: Delete before deployment
-          console.log(players[1]); // WARN: Delete before deployment
 
           events.publish('score');
         } else {
@@ -279,6 +277,15 @@ const game = (() => {
       const buttons = document.querySelectorAll(`[id^='gb']`);
       let resetOnNextClick = false;
 
+      function testWin(round, sign) {
+        if (['x', 'o', 'd'].includes(gameboard.getWinner(round, sign))) {
+          gameScore.set(gameboard.getWinner(round, sign));
+          players[0].score = gameScore.get.P0;
+          players[1].score = gameScore.get.P1;
+          resetOnNextClick = true;
+        }
+      }
+
       buttons.forEach((cell) => {
         cell.addEventListener('click', () => {
           if (resetOnNextClick) {
@@ -287,17 +294,18 @@ const game = (() => {
           } else if (gameboard.get[cell.id[2]][cell.id[3]] === '') {
             let sign = players[round % 2].sign;
 
-            gameboard.set([cell.id[2], cell.id[3]], sign);
-            round++;
-
-            if (['x', 'o', 'd'].includes(gameboard.getWinner(round, sign))) {
-              console.log(round + ' ' + sign); // WARN: Delete before deployment
-              console.log('has winner: ' + gameboard.getWinner(round, sign)); // WARN: Delete before deployment
-              gameScore.set(gameboard.getWinner(round, sign));
-              players[0].score = gameScore.get.P0;
-              players[1].score = gameScore.get.P1;
-              resetOnNextClick = true;
+            if (players[1].species === 'computer') {
+              gameboard.set(false, players[0].sign, [cell.id[2], cell.id[3]]);
+              if (round < 7) {
+                gameboard.set(true, players[1].sign);
+                round++;
+                testWin(round, players[1].sign);
+              }
+            } else {
+              gameboard.set(false, sign, [cell.id[2], cell.id[3]]);
             }
+            round++;
+            testWin(round, sign);
           }
         });
       });
