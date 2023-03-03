@@ -224,7 +224,7 @@ const game = (() => {
   })();
 
   const getPlayers = (() => {
-    const _getOpponent = () => {
+    const _getOpponent = (() => {
       render('pick');
 
       const buttonComputer = document.querySelector('.option__single');
@@ -239,8 +239,7 @@ const game = (() => {
 
       _buttonEvent(buttonComputer, 'computer');
       _buttonEvent(buttonHuman, 'human');
-    };
-    events.subscribe('pick', _getOpponent);
+    })();
 
     const _getName = () => {
       render('fill', players[1].species);
