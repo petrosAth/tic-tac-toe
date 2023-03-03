@@ -61,6 +61,13 @@
       background-size: 80%;
       background-position: center;
       background-repeat: no-repeat;
+
+      &--win {
+        background-image: url(images/circle-red.svg);
+        background-size: 80%;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
     }
 
     &--cross {
@@ -68,6 +75,13 @@
       background-size: 80%;
       background-position: center;
       background-repeat: no-repeat;
+
+      &--win {
+        background-image: url(images/cross-red.svg);
+        background-size: 80%;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
     }
   }
 }

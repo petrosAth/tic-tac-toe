@@ -50,17 +50,20 @@ const gameboard = (() => {
 
   function _render(boardPos, opt) {
     const signs = {
-      x: { name: 'cross', cssClass: 'sign--cross' },
-      o: { name: 'circle', cssClass: 'sign--circle' },
+      ['x']: 'sign--cross',
+      ['o']: 'sign--circle',
+      ['X']: 'sign--cross--win',
+      ['O']: 'sign--circle--win',
     };
     const signElement = document.querySelector(`#gb${boardPos[0]}${boardPos[1]}`);
 
     if (opt === undefined) {
       Object.keys(signs).forEach((sign) => {
-        signElement.classList.remove(signs[sign].cssClass);
+        signElement.classList.remove(signs[sign]);
       });
     } else {
-      signElement.classList.add(signs[opt].cssClass);
+      // console.log(signs[opt]); // WARN: delete before deployment
+      signElement.classList.add(signs[opt]);
     }
   }
 
@@ -76,7 +79,7 @@ const gameboard = (() => {
   function setGameboard(boardPos, opt) {
     if (boardPos === undefined) {
       _resetBoard();
-    } else if (['x', 'o'].includes(opt)) {
+    } else if (['x', 'o', 'X', 'O'].includes(opt)) {
       board[boardPos[0]][boardPos[1]] = opt;
       _render(boardPos, opt);
     }
@@ -89,18 +92,33 @@ const gameboard = (() => {
 
     let winner = 'n';
 
-      [board[0][0], board[1][0], board[2][0]],
-      [board[0][1], board[1][1], board[2][1]],
-      [board[0][2], board[1][2], board[2][2]],
+    // prettier-ignore
+    const coordinates = [
+      [ [0, 0], [0, 1], [0, 2], ],
+      [ [1, 0], [1, 1], [1, 2], ],
+      [ [2, 0], [2, 1], [2, 2], ],
 
-      [board[0][0], board[1][1], board[2][2]],
-      [board[0][2], board[1][1], board[2][0]],
+      [ [0, 0], [1, 0], [2, 0], ],
+      [ [0, 1], [1, 1], [2, 1], ],
+      [ [0, 2], [1, 2], [2, 2], ],
+
+      [ [0, 0], [1, 1], [2, 2], ],
+      [ [0, 2], [1, 1], [2, 0], ],
     ];
 
-    combinations.forEach((combination) => {
-      console.log(combination.join('') === sign.repeat(3));
-      if (combination.join('') === sign.repeat(3)) {
+    coordinates.forEach((c) => {
+      let sequence = '';
+
+      for (let i = 0; i < 3; i++) {
+        sequence += board[c[i][0]][c[i][1]].toLowerCase();
+      }
+
+      if (sequence === sign.repeat(3)) {
         winner = sign;
+
+        for (let i = 0; i < 3; i++) {
+          setGameboard([c[i][0], c[i][1]], sign.toUpperCase());
+        }
       }
     });
 
@@ -273,7 +291,7 @@ const game = (() => {
             round++;
 
             if (['x', 'o', 'd'].includes(gameboard.getWinner(round, sign))) {
-              console.log(round + ' ' + sign);
+              console.log(round + ' ' + sign); // WARN: Delete before deployment
               console.log('has winner: ' + gameboard.getWinner(round, sign)); // WARN: Delete before deployment
               gameScore.set(gameboard.getWinner(round, sign));
               players[0].score = gameScore.get.P0;
