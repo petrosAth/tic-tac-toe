@@ -152,6 +152,11 @@ const game = (() => {
     1: CreatePlayer('P1', '', '', 0, 'o'),
   };
 
+  const resetButton = document.querySelector('.button__reset');
+  resetButton.addEventListener('click', () => {
+    location.reload();
+  });
+
   const state = (() => {
     const states = {};
     const subscribe = (eventName, fn) => {
