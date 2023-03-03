@@ -274,7 +274,7 @@ const game = (() => {
     };
 
     const _startMatch = (() => {
-      const buttons = document.querySelectorAll(`[id^='gb']`);
+      const cells = document.querySelectorAll(`[id^='gb']`);
       let resetOnNextClick = false;
 
       function testWin(round, sign) {
@@ -286,7 +286,7 @@ const game = (() => {
         }
       }
 
-      buttons.forEach((cell) => {
+      cells.forEach((cell) => {
         cell.addEventListener('click', () => {
           if (resetOnNextClick) {
             resetOnNextClick = false;
