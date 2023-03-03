@@ -24,7 +24,7 @@ const gameScore = (() => {
     const opts = {
       ['x']: [false, [1, 0]],
       ['o']: [false, [0, 1]],
-      ['d']: [false, [1, 1]],
+      ['d']: [false, [0, 0]],
       ['_']: [true],
     };
 
@@ -88,10 +88,6 @@ const gameboard = (() => {
     }
 
     let winner = 'n';
-    const combinations = [
-      [board[0][0], board[0][1], board[0][2]],
-      [board[1][0], board[1][1], board[1][2]],
-      [board[2][0], board[2][1], board[2][2]],
 
       [board[0][0], board[1][0], board[2][0]],
       [board[0][1], board[1][1], board[2][1]],
@@ -263,20 +259,26 @@ const game = (() => {
 
     const _startMatch = (() => {
       const buttons = document.querySelectorAll(`[id^='gb']`);
+      let resetOnNextClick = false;
+
       buttons.forEach((cell) => {
         cell.addEventListener('click', () => {
-          if (gameboard.get[cell.id[2]][cell.id[3]] === '') {
+          if (resetOnNextClick) {
+            resetOnNextClick = false;
+            _resetMatch();
+          } else if (gameboard.get[cell.id[2]][cell.id[3]] === '') {
             let sign = players[round % 2].sign;
 
             gameboard.set([cell.id[2], cell.id[3]], sign);
             round++;
 
             if (['x', 'o', 'd'].includes(gameboard.getWinner(round, sign))) {
+              console.log(round + ' ' + sign);
               console.log('has winner: ' + gameboard.getWinner(round, sign)); // WARN: Delete before deployment
               gameScore.set(gameboard.getWinner(round, sign));
               players[0].score = gameScore.get.P0;
               players[1].score = gameScore.get.P1;
-              _resetMatch();
+              resetOnNextClick = true;
             }
           }
         });
