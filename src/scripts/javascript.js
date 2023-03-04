@@ -91,11 +91,7 @@ const gameboard = (() => {
     }
   }
 
-  function getWinner(round, sign) {
-    if (round < 4) {
-      return;
-    }
-
+  function getWinner(sign, highlight) {
     let winner = 'n';
 
     // prettier-ignore
@@ -119,18 +115,16 @@ const gameboard = (() => {
         sequence += board[c[i][0]][c[i][1]].toLowerCase();
       }
 
-      if (sequence === sign.repeat(3)) {
-        winner = sign;
+      if (highlight) {
+        if (sequence === sign.repeat(3)) {
+          winner = sign;
 
-        for (let i = 0; i < 3; i++) {
-          setGameboard(false, sign.toUpperCase(), [c[i][0], c[i][1]]);
+          for (let i = 0; i < 3; i++) {
+            setGameboard(false, sign.toUpperCase(), [c[i][0], c[i][1]]);
+          }
         }
       }
     });
-
-    if (round > 8 && winner === 'n') {
-      return 'd';
-    }
 
     return winner;
   }
@@ -282,12 +276,22 @@ const game = (() => {
       let resetOnNextClick = false;
 
       function _hasWinner(round, sign) {
-        return ['x', 'o', 'd'].includes(gameboard.getWinner(round, sign));
+        if (round < 4) {
+          return false;
+        }
+
+        let winner = gameboard.getWinner(sign, true);
+
+        if (round > 8 && winner === 'n') {
+          return true;
+        }
+
+        return ['x', 'o', 'd'].includes(winner);
       }
 
       function _setScore(round, sign) {
         if (_hasWinner(round, sign)) {
-          gameScore.set(gameboard.getWinner(round, sign));
+          gameScore.set(gameboard.getWinner(sign, true));
           players[0].score = gameScore.get.P0;
           players[1].score = gameScore.get.P1;
           resetOnNextClick = true;
@@ -315,7 +319,7 @@ const game = (() => {
             } else {
               gameboard.set(false, sign, [cell.id[2], cell.id[3]]);
               round++;
-              checkWin(round, sign);
+              _setScore(round, sign);
             }
           }
         });
