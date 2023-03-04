@@ -281,8 +281,12 @@ const game = (() => {
       const cells = document.querySelectorAll(`[id^='gb']`);
       let resetOnNextClick = false;
 
-      function checkWin(round, sign) {
-        if (['x', 'o', 'd'].includes(gameboard.getWinner(round, sign))) {
+      function _hasWinner(round, sign) {
+        return ['x', 'o', 'd'].includes(gameboard.getWinner(round, sign));
+      }
+
+      function _setScore(round, sign) {
+        if (_hasWinner(round, sign)) {
           gameScore.set(gameboard.getWinner(round, sign));
           players[0].score = gameScore.get.P0;
           players[1].score = gameScore.get.P1;
@@ -301,12 +305,12 @@ const game = (() => {
             if (players[1].species === 'computer') {
               gameboard.set(false, players[0].sign, [cell.id[2], cell.id[3]]);
               round++;
-              checkWin(round, sign);
+              _setScore(round, sign);
 
-              if (round < 9 && !['x', 'o', 'd'].includes(gameboard.getWinner(round, sign))) {
+              if (round < 9 && !_hasWinner(round, sign)) {
                 gameboard.set(true, players[1].sign);
                 round++;
-                checkWin(round, players[1].sign);
+                _setScore(round, players[1].sign);
               }
             } else {
               gameboard.set(false, sign, [cell.id[2], cell.id[3]]);
