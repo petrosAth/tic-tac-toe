@@ -22,10 +22,10 @@ const gameScore = (() => {
 
   const setScore = (sign) => {
     const opts = {
-      ['x']: [false, [1, 0]],
-      ['o']: [false, [0, 1]],
-      ['d']: [false, [0, 0]],
-      ['_']: [true],
+      x: [false, [1, 0]],
+      o: [false, [0, 1]],
+      d: [false, [0, 0]],
+      r: [true],
     };
 
     if (Object.keys(opts).includes(sign)) {
@@ -264,7 +264,7 @@ const game = (() => {
   const play = () => {
     let round = 0;
     render('score');
-    gameScore.set('_');
+    gameScore.set('r');
 
     const _resetMatch = () => {
       gameboard.set();
