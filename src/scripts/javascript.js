@@ -115,10 +115,10 @@ const gameboard = (() => {
         sequence += board[c[i][0]][c[i][1]].toLowerCase();
       }
 
-      if (highlight) {
-        if (sequence === sign.repeat(3)) {
-          winner = sign;
+      if (sequence === sign.repeat(3)) {
+        winner = sign;
 
+        if (highlight) {
           for (let i = 0; i < 3; i++) {
             setGameboard(false, sign.toUpperCase(), [c[i][0], c[i][1]]);
           }
