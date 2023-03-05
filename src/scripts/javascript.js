@@ -92,7 +92,17 @@ const gameboard = (() => {
   }
 
   function getWinner(sign, highlight) {
-    let winner = 'n';
+    let fullBoard = true;
+
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (board[i][j] === '') {
+          fullBoard = false;
+        }
+      }
+    }
+
+    let winner = fullBoard ? 'd' : undefined;
 
     // prettier-ignore
     const coordinates = [
@@ -115,7 +125,7 @@ const gameboard = (() => {
         sequence += board[c[i][0]][c[i][1]].toLowerCase();
       }
 
-      if (sequence === sign.repeat(3)) {
+      if (sequence === sign.repeat(3).toLowerCase()) {
         winner = sign;
 
         if (highlight) {
@@ -282,11 +292,11 @@ const game = (() => {
 
         let winner = gameboard.getWinner(sign, true);
 
-        if (round > 8 && winner === 'n') {
+        if (round > 8 && winner === 'd') {
           return true;
         }
 
-        return ['x', 'o', 'd'].includes(winner);
+        return ['x', 'o'].includes(winner);
       }
 
       function _setScore(round, sign) {
