@@ -167,7 +167,7 @@ const playAi = (board, sign) => {
         for (let j = 0; j < 3; j++) {
           if (board[i][j] === '') {
             board[i][j] = isMaximizing ? 'x' : 'o';
-            let score = miniMax(board, depth + 1, false);
+            let score = miniMax(board, depth + 1, !isMaximizing);
             board[i][j] = '';
             bestScore = isMaximizing ? Math.min(score, bestScore) : Math.max(score, bestScore);
           }
@@ -176,7 +176,7 @@ const playAi = (board, sign) => {
       return bestScore;
     };
 
-    return isMaximizing ? calculateNextMove(true) : calculateNextMove(false);
+    return calculateNextMove(isMaximizing);
   };
 
   let bestScore = -Infinity;
