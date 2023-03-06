@@ -5,9 +5,10 @@ JavaScript Object, Factory Functions and the Module Pattern.
 
 ## Languages
 
-- `HTML`
+- `HTML`: Used template and form elements
 - `SCSS`: Used for styling utilizing the 7-1 file structure
-- `JavaScript`
+- `JavaScript`: Used pubsub for the game states and minimax algorithm for the
+  unbeatable A.I.
 
 ## Tools
 
