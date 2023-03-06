@@ -79,12 +79,7 @@ const gameboard = (() => {
     if (arguments.length === 0) {
       _resetBoard();
     } else if (ai) {
-      let rng = [Math.floor(Math.random() * 3).toString(), Math.floor(Math.random() * 3).toString()];
-      while (board[rng[0]][rng[1]] !== '') {
-        rng = [Math.floor(Math.random() * 3).toString(), Math.floor(Math.random() * 3).toString()];
-      }
-      board[rng[0]][rng[1]] = sign;
-      _render([[rng[0]], [rng[1]]], sign);
+      playAi(board, sign);
     } else if (['x', 'o', 'X', 'O'].includes(sign)) {
       board[boardPos[0]][boardPos[1]] = sign;
       _render(boardPos, sign);
@@ -148,6 +143,58 @@ const gameboard = (() => {
 
 const CreatePlayer = (id, species, name, score, sign) => {
   return { id, species, name, score, sign };
+};
+
+const playAi = (board, sign) => {
+  const signs = {
+    human: sign === 'o' ? 'x' : 'o',
+    ai: sign === 'o' ? 'o' : 'x',
+  };
+
+  const miniMax = (board, depth, isMaximizing) => {
+    const _hasWinner = (sign) => gameboard.getWinner(sign, false);
+    if (_hasWinner(signs.human) === signs.human) {
+      return -1;
+    } else if (_hasWinner(signs.ai) === signs.ai) {
+      return 1;
+    } else if (_hasWinner(signs.human) === 'd') {
+      return 0;
+    }
+
+    const calculateNextMove = (isMaximizing) => {
+      let bestScore = isMaximizing ? Infinity : -Infinity;
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (board[i][j] === '') {
+            board[i][j] = isMaximizing ? 'x' : 'o';
+            let score = miniMax(board, depth + 1, false);
+            board[i][j] = '';
+            bestScore = isMaximizing ? Math.min(score, bestScore) : Math.max(score, bestScore);
+          }
+        }
+      }
+      return bestScore;
+    };
+
+    return isMaximizing ? calculateNextMove(true) : calculateNextMove(false);
+  };
+
+  let bestScore = -Infinity;
+  let optimalMove;
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (board[i][j] === '') {
+        board[i][j] = signs.ai;
+        let score = miniMax(board, 0, true);
+        board[i][j] = '';
+        if (score > bestScore) {
+          bestScore = score;
+          optimalMove = [i, j];
+        }
+      }
+    }
+  }
+  gameboard.set(false, signs.ai, [optimalMove[0], optimalMove[1]]);
 };
 
 const game = (() => {
