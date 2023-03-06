@@ -7,8 +7,11 @@ JavaScript Object, Factory Functions and the Module Pattern.
 
 - `HTML`: Used template and form elements
 - `SCSS`: Used for styling utilizing the 7-1 file structure
-- `JavaScript`: Used pubsub for the game states and minimax algorithm for the
-  unbeatable A.I.
+- `JavaScript`: Used
+  [PubSub](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern)
+  design pattern for managing the game states and the
+  [Minimax](https://en.wikipedia.org/wiki/Minimax) algorithm for the
+  implementation of an unbeatable A.I.
 
 ## Tools
 
