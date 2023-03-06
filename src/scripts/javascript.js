@@ -252,7 +252,7 @@ const game = (() => {
 
     const _fillPanel = (opponent) => {
       if (opponent === 'computer') {
-        const inputP1 = fill.querySelector('.input:has([for="input__P1"])');
+        const inputP1 = fill.querySelector('.input__container__P1');
         inputP1.remove();
       }
 
