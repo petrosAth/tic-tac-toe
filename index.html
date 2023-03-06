@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    
+    <title>Tic Tac Toe</title>
+    <script type="module" crossorigin src="/tic-tac-toe/assets/index-af878067.js"></script>
+    <link rel="stylesheet" href="/tic-tac-toe/assets/index-87e49a4e.css">
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">
+        <div class="logo__icon"></div>
+        <div class="logo__text"><h1>Tic Tac Toe</h1></div>
+      </div>
+      <button class="button button__reset" type="button">Reset</button>
+    </header>
+    <main class="main">
+      <section class="board">
+        <div class="board__column">
+          <button class="board__column__row" id="gb00" type="button"></button>
+          <button class="board__column__row" id="gb10" type="button"></button>
+          <button class="board__column__row" id="gb20" type="button"></button>
+        </div>
+        <div class="board__column">
+          <button class="board__column__row" id="gb01" type="button"></button>
+          <button class="board__column__row" id="gb11" type="button"></button>
+          <button class="board__column__row" id="gb21" type="button"></button>
+        </div>
+        <div class="board__column">
+          <button class="board__column__row" id="gb02" type="button"></button>
+          <button class="board__column__row" id="gb12" type="button"></button>
+          <button class="board__column__row" id="gb22" type="button"></button>
+        </div>
+      </section>
+      <div class="separator"></div>
+      <section class="panel">
+        <template id="template">
+          <div class="pick">
+            <ul class="opponent">
+              <li class="opponent__option">
+                <button class="button button__option option__single" type="button" autofocus>
+                  Play against the computer!
+                </button>
+              </li>
+              <li class="opponent__option">
+                <button class="button button__option option__multi" type="button">Play against a friend!</button>
+              </li>
+            </ul>
+          </div>
+          <div class="fill">
+            <form class="fill__name-form">
+              <div class="fill__name-form__input">
+                <div class="input input__container__P0">
+                  <label for="input__P0">Insert name</label>
+                  <input type="text" id="input__P0" name="name" required="required" placeholder="Player 1" />
+                </div>
+                <div class="input input__container__P1">
+                  <label for="input__P1">Insert name</label>
+                  <input type="text" id="input__P1" name="name" required="required" placeholder="Player 2" />
+                </div>
+              </div>
+              <button class="button button__name-form">Start!</button>
+            </form>
+          </div>
+          <div class="score">
+            <h2 class="score__header">Score</h2>
+            <ul class="score__board">
+              <li class="score__board__player">
+                <span class="player__name" id="nameP0">Player 1</span> <span class="player__score" id="scoreP0"></span>
+              </li>
+              <li class="score__board__player">
+                <span class="player__name" id="nameP1">Player 2</span> <span class="player__score" id="scoreP1"></span>
+              </li>
+            </ul>
+          </div>
+        </template>
+      </section>
+    </main>
+  </body>
+</html>
