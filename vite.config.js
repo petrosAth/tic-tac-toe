@@ -5,8 +5,8 @@ export default defineConfig({
   base: '/tic-tac-toe/',
   css: {
     devSourcemap: true,
-  },
-  postcss: {
-    plugins: [autoprefixer({})],
+    postcss: {
+      plugins: [autoprefixer()],
+    },
   },
 });
